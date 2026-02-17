@@ -1,20 +1,20 @@
-import { Box, Typography, Container } from '@mui/material'
+import { Box, Typography, Container, Stack } from '@mui/material'
 
 const features = [
   {
     title: 'Recruit patients',
     description:
-      'Reach and screen the right patients efficiently. marsh.ai streamlines outreach and eligibility so you fill cohorts faster.',
+      'Automatically surface eligible patients from across your trial portfolio, so coordinators spend less time searching and more time enrolling.',
   },
   {
     title: 'Monitor cohort',
     description:
-      'Track enrollment, retention, and site performance in one place. Keep your trial on schedule with clear visibility into your cohort.',
+      'Stay on top of enrollment, retention, and site performance with a live view of your cohort, right where your team already works.',
   },
   {
     title: 'Clean data capture',
     description:
-      'Capture data in a clinically approved format from day one. Reduce queries and rework with structured, compliant data collection.',
+      'Capture data in a clinically approved format from day one, reducing downstream queries and rework with structured, compliant collection.',
   },
 ]
 
@@ -23,38 +23,71 @@ function FeatureSection({ feature, index, isAlt }) {
     <Box
       component="section"
       sx={{
-        minHeight: '100vh',
+        minHeight: { xs: '80vh', md: '90vh' },
         display: 'flex',
         alignItems: 'center',
-        justifyContent: 'center',
-        py: 8,
+        py: { xs: 8, md: 10 },
         px: 2,
         bgcolor: isAlt ? 'grey.50' : 'background.paper',
-        scrollMarginTop: 64,
+        scrollMarginTop: 72,
       }}
     >
-      <Container maxWidth="md">
-        <Box sx={{ textAlign: 'center', maxWidth: 560, mx: 'auto' }}>
-          <Typography
-            component="span"
-            variant="overline"
-            sx={{ color: 'primary.main', fontWeight: 600, letterSpacing: 0.5 }}
-          >
-            {String(index).padStart(2, '0')}
-          </Typography>
-          <Typography
-            component="h2"
-            variant="h4"
-            fontWeight={600}
-            letterSpacing="-0.02em"
-            gutterBottom
-            sx={{ mt: 0.5 }}
-          >
-            {feature.title}
-          </Typography>
-          <Typography variant="body1" color="text.secondary" sx={{ lineHeight: 1.7 }}>
-            {feature.description}
-          </Typography>
+      <Container maxWidth="lg">
+        <Box
+          sx={{
+            display: 'flex',
+            flexDirection: { xs: 'column', md: 'row' },
+            alignItems: { xs: 'flex-start', md: 'center' },
+            gap: { xs: 4, md: 8 },
+          }}
+        >
+          <Box sx={{ flex: 1 }}>
+            <Typography
+              component="span"
+              variant="overline"
+              sx={{
+                color: 'primary.main',
+                fontWeight: 600,
+                letterSpacing: 1,
+              }}
+            >
+              {String(index).padStart(2, '0')} · Feature
+            </Typography>
+            <Typography
+              component="h2"
+              variant="h4"
+              sx={{
+                fontWeight: 700,
+                letterSpacing: '-0.03em',
+                mt: 1,
+                mb: 1.5,
+              }}
+            >
+              {feature.title}
+            </Typography>
+          </Box>
+
+          <Box sx={{ flex: 1 }}>
+            <Typography
+              variant="body1"
+              color="text.secondary"
+              sx={{ lineHeight: 1.7, mb: 2 }}
+            >
+              {feature.description}
+            </Typography>
+            <Stack
+              direction="row"
+              spacing={3}
+              sx={{ mt: 1.5, color: 'text.secondary', fontSize: 13 }}
+            >
+              <Typography component="span">
+                • Built for clinical teams
+              </Typography>
+              <Typography component="span">
+                • Works alongside your workflows
+              </Typography>
+            </Stack>
+          </Box>
         </Box>
       </Container>
     </Box>
@@ -64,6 +97,36 @@ function FeatureSection({ feature, index, isAlt }) {
 function FeaturesPage() {
   return (
     <Box>
+      <Box
+        sx={{
+          py: { xs: 6, md: 8 },
+          px: 2,
+          bgcolor: 'background.default',
+        }}
+      >
+        <Container maxWidth="lg">
+          <Typography
+            component="h1"
+            variant="h4"
+            sx={{
+              fontWeight: 700,
+              letterSpacing: '-0.03em',
+              mb: 1,
+            }}
+          >
+            Everything you need to run faster trials
+          </Typography>
+          <Typography
+            variant="body1"
+            color="text.secondary"
+            sx={{ maxWidth: 560 }}
+          >
+            marsh.ai automates the operational work behind clinical trials—so recruitment,
+            monitoring, and data capture stay aligned from day one.
+          </Typography>
+        </Container>
+      </Box>
+
       {features.map((feature, index) => (
         <FeatureSection
           key={feature.title}

@@ -23,10 +23,9 @@ function FeatureSection({ feature, index, isAlt }) {
     <Box
       component="section"
       sx={{
-        minHeight: { xs: '80vh', md: '90vh' },
         display: 'flex',
         alignItems: 'center',
-        py: { xs: 8, md: 10 },
+        py: { xs: 6, md: 8 },
         px: 2,
         bgcolor: isAlt ? 'grey.50' : 'background.paper',
         scrollMarginTop: 72,

@@ -5,25 +5,99 @@ import { Link as RouterLink } from 'react-router-dom'
 function Layout() {
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
-      <AppBar position="static">
-        <Toolbar>
-          <Typography
-            component={RouterLink}
-            to="/"
-            variant="h6"
-            sx={{ flexGrow: 1, textDecoration: 'none', color: 'inherit' }}
+      <AppBar
+        position="sticky"
+        elevation={0}
+        color="inherit"
+        sx={(theme) => ({
+          borderBottom: `1px solid ${theme.palette.divider}`,
+          backdropFilter: 'blur(10px)',
+          bgcolor: 'rgba(255,255,255,0.92)',
+        })}
+      >
+        <Toolbar sx={{ px: { xs: 2, sm: 3 } }}>
+          <Container
+            maxWidth="lg"
+            sx={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              px: 0,
+            }}
           >
-            marsh.ai
-          </Typography>
-          <Button color="inherit" component={RouterLink} to="/">
-            Home
-          </Button>
-          <Button color="inherit" component={RouterLink} to="/features">
-            Features
-          </Button>
-          <Button color="inherit" component={RouterLink} to="/contact">
-            Contact
-          </Button>
+            <Box
+              component={RouterLink}
+              to="/"
+              sx={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                textDecoration: 'none',
+                color: 'inherit',
+              }}
+            >
+              <Box
+                sx={(theme) => ({
+                  width: 32,
+                  height: 32,
+                  borderRadius: '12px',
+                  bgcolor: theme.palette.primary.main,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  mr: 1.5,
+                })}
+              >
+                <Typography
+                  variant="subtitle2"
+                  sx={{ color: 'common.white', fontWeight: 700, letterSpacing: '-0.03em' }}
+                >
+                  m
+                </Typography>
+              </Box>
+              <Typography
+                variant="h6"
+                sx={{
+                  fontWeight: 600,
+                  letterSpacing: '-0.04em',
+                }}
+              >
+                marsh.ai
+              </Typography>
+            </Box>
+
+            <Box sx={{ display: 'flex', gap: 1.5 }}>
+              <Button
+                component={RouterLink}
+                to="/"
+                color="inherit"
+                sx={{ textTransform: 'none', fontWeight: 500 }}
+              >
+                Home
+              </Button>
+              <Button
+                component={RouterLink}
+                to="/features"
+                color="inherit"
+                sx={{ textTransform: 'none', fontWeight: 500 }}
+              >
+                Features
+              </Button>
+              <Button
+                component={RouterLink}
+                to="/contact"
+                variant="contained"
+                sx={{
+                  textTransform: 'none',
+                  fontWeight: 600,
+                  borderRadius: 999,
+                  px: 2.5,
+                  py: 0.75,
+                }}
+              >
+                Contact
+              </Button>
+            </Box>
+          </Container>
         </Toolbar>
       </AppBar>
       <Box component="main" sx={{ flexGrow: 1 }}>

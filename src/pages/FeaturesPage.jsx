@@ -1,26 +1,43 @@
-import { Box, Typography, Container, Stack } from '@mui/material'
+import { Box, Typography, Container, Stack, Fade, Paper } from '@mui/material'
+import { useInView } from '../hooks/useInView'
 
 const features = [
   {
-    title: 'Recruit patients',
+    title: 'Patient identification',
     description:
-      'Automatically surface eligible patients from across your trial portfolio, so coordinators spend less time searching and more time enrolling.',
+      'Screen thousands of patients across the EHR against inclusion and exclusion criteria—checking lifelong history for labs, medications, and imaging. What takes coordinators and CROs 3–6 months manually, our agents do in minutes.',
+    stat: '3–6 months → minutes',
+    bullets: ['EHR-wide screening', 'Inclusion/exclusion in minutes'],
   },
   {
-    title: 'Monitor cohort',
+    title: 'Patient pre-screening',
     description:
-      'Stay on top of enrollment, retention, and site performance with a live view of your cohort, right where your team already works.',
+      'Voice agents that intelligently follow up with patients: schedule bloodwork and imaging, confirm medications, and keep pre-screening on track. Humans stay focused on informed consent and in-person visits—the tasks that actually need them.',
+    stat: 'Weeks → streamlined',
+    bullets: ['Voice-led follow-up', 'Consent & visits stay human-led'],
   },
   {
-    title: 'Clean data capture',
+    title: 'Patient monitoring',
     description:
-      'Capture data in a clinically approved format from day one, reducing downstream queries and rework with structured, compliant collection.',
+      'Between identification and trial launch, over 60% of patients’ eligibility changes. Our agent monitors the EHR 24/7 for labs, meds, imaging, and notes. When someone becomes ineligible, it auto-identifies the next candidate and restarts pre-screening—so trials don’t lose participants.',
+    stat: '24/7 eligibility tracking',
+    bullets: ['Reduces $65M+ per failed trial', 'Auto-backfill when eligibility changes'],
+  },
+  {
+    title: 'Medical data storage',
+    description:
+      'Each trial needs specific data extracted from the EHR and loaded into EDC and eCOA. Our agents find the right information across the full record and integrate it accurately—cutting ~99% of the time and errors of manual export.',
+    stat: '~99% time reduction',
+    bullets: ['EHR → EDC/eCOA', 'Accurate, audit-ready export'],
   },
 ]
 
 function FeatureSection({ feature, index, isAlt }) {
+  const [ref, inView] = useInView({ threshold: 0.15 })
+
   return (
     <Box
+      ref={ref}
       component="section"
       sx={{
         display: 'flex',
@@ -31,15 +48,29 @@ function FeatureSection({ feature, index, isAlt }) {
         scrollMarginTop: 72,
       }}
     >
-      <Container maxWidth="lg">
-        <Box
-          sx={{
-            display: 'flex',
-            flexDirection: { xs: 'column', md: 'row' },
-            alignItems: { xs: 'flex-start', md: 'center' },
-            gap: { xs: 4, md: 8 },
-          }}
-        >
+      <Fade in={inView} timeout={500}>
+        <Container maxWidth="lg">
+          <Paper
+            elevation={0}
+            sx={{
+              display: 'flex',
+              flexDirection: { xs: 'column', md: 'row' },
+              alignItems: { xs: 'flex-start', md: 'center' },
+              gap: { xs: 4, md: 8 },
+              p: { xs: 3, md: 4 },
+              borderRadius: 3,
+              border: '1px solid',
+              borderColor: 'divider',
+              bgcolor: 'transparent',
+              transition: 'transform 0.25s ease, box-shadow 0.25s ease',
+              '&:hover': {
+                transform: 'translateY(-4px)',
+                boxShadow: '0 16px 40px rgba(13, 40, 71, 0.1)',
+                borderColor: 'primary.main',
+                bgcolor: 'background.paper',
+              },
+            }}
+          >
           <Box sx={{ flex: 1 }}>
             <Typography
               component="span"
@@ -67,6 +98,14 @@ function FeatureSection({ feature, index, isAlt }) {
           </Box>
 
           <Box sx={{ flex: 1 }}>
+            {feature.stat && (
+              <Typography
+                variant="overline"
+                sx={{ color: 'primary.main', fontWeight: 600, letterSpacing: 0.5, display: 'block', mb: 1 }}
+              >
+                {feature.stat}
+              </Typography>
+            )}
             <Typography
               variant="body1"
               color="text.secondary"
@@ -74,24 +113,22 @@ function FeatureSection({ feature, index, isAlt }) {
             >
               {feature.description}
             </Typography>
-            <Stack
-              direction="row"
-              spacing={3}
-              sx={{ mt: 1.5, color: 'text.secondary', fontSize: 13 }}
-            >
-              <Typography component="span">
-                • Built for clinical teams
-              </Typography>
-              <Typography component="span">
-                • Works alongside your workflows
-              </Typography>
-            </Stack>
+            {feature.bullets && (
+              <Stack spacing={0.5} sx={{ color: 'text.secondary', fontSize: 13 }}>
+                {feature.bullets.map((b) => (
+                  <Typography key={b} component="span">• {b}</Typography>
+                ))}
+              </Stack>
+            )}
           </Box>
-        </Box>
-      </Container>
+          </Paper>
+        </Container>
+      </Fade>
     </Box>
   )
 }
+
+const sectionGradient = 'linear-gradient(135deg, #f8fafc 0%, #eef2f7 100%)'
 
 function FeaturesPage() {
   return (
@@ -100,7 +137,7 @@ function FeaturesPage() {
         sx={{
           py: { xs: 6, md: 8 },
           px: 2,
-          bgcolor: 'background.default',
+          background: sectionGradient,
         }}
       >
         <Container maxWidth="lg">
@@ -113,15 +150,14 @@ function FeaturesPage() {
               mb: 1,
             }}
           >
-            Everything you need to run faster trials
+            AI agents for the full pre-trial pipeline
           </Typography>
           <Typography
             variant="body1"
             color="text.secondary"
-            sx={{ maxWidth: 560 }}
+            sx={{ maxWidth: 600 }}
           >
-            marsh.ai automates the operational work behind clinical trials—so recruitment,
-            monitoring, and data capture stay aligned from day one.
+            From finding the right patients to keeping them eligible and loading data into EDC and eCOA—our agents handle identification, pre-screening, monitoring, and storage so coordinators and CROs can focus on what only humans can do.
           </Typography>
         </Container>
       </Box>

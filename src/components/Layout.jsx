@@ -1,8 +1,26 @@
+import { useState, useEffect } from 'react'
 import { Outlet } from 'react-router-dom'
-import { AppBar, Toolbar, Typography, Button, Box, Container } from '@mui/material'
+import { AppBar, Toolbar, Typography, Button, Box, Container, Fab, Zoom } from '@mui/material'
 import { Link as RouterLink } from 'react-router-dom'
 
+function KeyboardArrowUpIcon() {
+  return (
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
+      <path d="M7.41 15.41L12 10.83l4.59 4.58L18 14l-6-6-6 6z" />
+    </svg>
+  )
+}
+
 function Layout() {
+  const [showBackToTop, setShowBackToTop] = useState(false)
+
+  useEffect(() => {
+    const handleScroll = () => setShowBackToTop(window.scrollY > 400)
+    window.addEventListener('scroll', handleScroll, { passive: true })
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
+
+  const scrollToTop = () => window.scrollTo({ top: 0, behavior: 'smooth' })
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
       <AppBar
@@ -103,6 +121,22 @@ function Layout() {
       <Box component="main" sx={{ flexGrow: 1 }}>
         <Outlet />
       </Box>
+      <Zoom in={showBackToTop}>
+        <Fab
+          color="primary"
+          size="small"
+          onClick={scrollToTop}
+          aria-label="Back to top"
+          sx={{
+            position: 'fixed',
+            bottom: 24,
+            right: 24,
+            zIndex: 9,
+          }}
+        >
+          <KeyboardArrowUpIcon />
+        </Fab>
+      </Zoom>
       <Box
         component="footer"
         sx={{ py: 2, px: 2, mt: 'auto', backgroundColor: (theme) => theme.palette.grey[200] }}
@@ -113,7 +147,7 @@ function Layout() {
           sx={{ textAlign: 'left', marginLeft: 0, marginRight: 'auto' }}
         >
           <Typography variant="body2" color="text.secondary">
-            © marsh.ai – Clinical trial automation
+            © marsh.ai – AI for clinical pre-trial operations
           </Typography>
         </Container>
       </Box>

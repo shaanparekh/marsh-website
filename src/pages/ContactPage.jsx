@@ -10,10 +10,12 @@ function ContactPage() {
     setSubmitted(true)
   }
 
+  const sectionGradient = 'linear-gradient(135deg, #f8fafc 0%, #eef2f7 100%)'
+
   return (
     <Box
       sx={{
-        bgcolor: 'background.default',
+        background: sectionGradient,
         py: { xs: 8, md: 10 },
         px: 2,
       }}
@@ -49,11 +51,11 @@ function ContactPage() {
                 mb: 1.5,
               }}
             >
-              See how marsh.ai fits your trials
+              See how marsh.ai fits your pre-trial workflow
             </Typography>
             <Typography variant="body1" color="text.secondary" sx={{ maxWidth: 520, mb: 3 }}>
-              Share your email and we’ll reach out with a short overview tailored to your
-              recruitment, cohort monitoring, or data capture needs.
+              Share your email and we’ll reach out with a short overview of our agents for
+              identification, pre-screening, monitoring, and data storage—for sites, sponsors, and CROs.
             </Typography>
             <Stack spacing={0.5} sx={{ fontSize: 13, color: 'text.secondary' }}>
               <Typography component="span">• No obligation, just a quick conversation</Typography>
@@ -74,6 +76,12 @@ function ContactPage() {
                   borderColor: 'divider',
                   p: { xs: 3, sm: 4 },
                   bgcolor: 'background.paper',
+                  transition: 'transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease',
+                  '&:hover': {
+                    transform: 'translateY(-6px)',
+                    boxShadow: '0 20px 40px rgba(13, 40, 71, 0.12)',
+                    borderColor: 'primary.main',
+                  },
                 }}
               >
                 {submitted ? (

@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react'
-import { Outlet } from 'react-router-dom'
+import { Outlet, useLocation, Link as RouterLink } from 'react-router-dom'
 import { AppBar, Toolbar, Typography, Button, Box, Container, Fab, Zoom } from '@mui/material'
-import { Link as RouterLink } from 'react-router-dom'
 
 function KeyboardArrowUpIcon() {
   return (
@@ -13,6 +12,8 @@ function KeyboardArrowUpIcon() {
 
 function Layout() {
   const [showBackToTop, setShowBackToTop] = useState(false)
+  const location = useLocation()
+  const isHome = location.pathname === '/'
 
   useEffect(() => {
     const handleScroll = () => setShowBackToTop(window.scrollY > 400)
@@ -21,6 +22,7 @@ function Layout() {
   }, [])
 
   const scrollToTop = () => window.scrollTo({ top: 0, behavior: 'smooth' })
+
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
       <AppBar
@@ -85,16 +87,18 @@ function Layout() {
 
             <Box sx={{ display: 'flex', gap: 1.5 }}>
               <Button
-                component={RouterLink}
-                to="/"
+                component={isHome ? 'button' : RouterLink}
+                to={isHome ? undefined : '/'}
+                onClick={isHome ? scrollToTop : undefined}
                 color="inherit"
                 sx={{ textTransform: 'none', fontWeight: 500 }}
               >
                 Home
               </Button>
               <Button
-                component={RouterLink}
-                to="/features"
+                component={isHome ? 'a' : RouterLink}
+                to={isHome ? undefined : '/#features'}
+                href={isHome ? '#features' : undefined}
                 color="inherit"
                 sx={{ textTransform: 'none', fontWeight: 500 }}
               >

@@ -1,20 +1,57 @@
 import { Box, Typography, Container, Button, Stack, Fade } from '@mui/material'
-import { Link as RouterLink } from 'react-router-dom'
+import { Link as RouterLink, useLocation } from 'react-router-dom'
+import { useEffect, useRef, useState } from 'react'
+import FeaturesSection from '../components/FeaturesSection'
+
+const AGENTS = [
+  { name: 'Identification', description: 'EHR-wide screening in minutes' },
+  { name: 'Pre-screening', description: 'Voice-led follow-up; humans focus on consent & visits' },
+  { name: 'Monitoring', description: '24/7 eligibility tracking, auto-backfill' },
+  { name: 'Data storage', description: 'EHR → EDC/eCOA, audit-ready export' },
+]
+const ROTATE_MS = 2800
 
 const heroGradient = 'linear-gradient(135deg, #f8fafc 0%, #eef2f7 50%, #e8eef5 100%)'
 const textGradient = 'linear-gradient(135deg, #0d2847 0%, #1a3a5c 50%, #2d4a6f 100%)'
 
 function HomePage() {
+  const location = useLocation()
+  const hasScrolledToFeatures = useRef(false)
+  const [agentIndex, setAgentIndex] = useState(0)
+
+  useEffect(() => {
+    const id = setInterval(() => {
+      setAgentIndex((i) => (i + 1) % AGENTS.length)
+    }, ROTATE_MS)
+    return () => clearInterval(id)
+  }, [])
+
+  // When landing with #features (e.g. from Features nav or /features redirect), scroll to features
+  useEffect(() => {
+    if (location.hash !== '#features') {
+      hasScrolledToFeatures.current = false
+      return
+    }
+    if (hasScrolledToFeatures.current) return
+    hasScrolledToFeatures.current = true
+    const t = setTimeout(() => {
+      const el = document.getElementById('features')
+      if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    }, 150)
+    return () => clearTimeout(t)
+  }, [location.hash])
+
   return (
-    <Box
-      sx={{
-        position: 'relative',
-        background: heroGradient,
-        py: { xs: 8, md: 12 },
-        px: { xs: 2, sm: 3 },
-        overflow: 'hidden',
-      }}
-    >
+    <>
+      <Box
+        sx={{
+          position: 'relative',
+          background: heroGradient,
+          py: { xs: 8, md: 12 },
+          px: { xs: 2, sm: 3 },
+          overflow: 'hidden',
+        }}
+      >
       {/* Soft ambient blob */}
       <Box
         sx={{
@@ -116,8 +153,8 @@ function HomePage() {
                 Get in touch
               </Button>
               <Button
-                component={RouterLink}
-                to="/features"
+                component="a"
+                href="#features"
                 variant="text"
                 size="large"
                 sx={{
@@ -143,50 +180,102 @@ function HomePage() {
                 borderRadius: 4,
                 border: '1px solid',
                 borderColor: 'divider',
-                p: 3,
-                minWidth: { xs: '100%', sm: 320 },
-                maxWidth: 380,
+                p: 4,
+                minWidth: { xs: '100%', sm: 400 },
+                maxWidth: 480,
                 bgcolor: 'rgba(255,255,255,0.9)',
                 backdropFilter: 'blur(12px)',
-                transition: 'transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease',
+                transition: 'box-shadow 0.25s ease, border-color 0.25s ease',
                 '&:hover': {
-                  transform: 'translateY(-6px)',
                   boxShadow: '0 20px 40px rgba(13, 40, 71, 0.12)',
                   borderColor: 'primary.main',
                 },
               }}
             >
-              <Typography variant="subtitle2" color="text.secondary" gutterBottom>
+              <Typography
+                variant="subtitle1"
+                color="text.secondary"
+                gutterBottom
+                sx={{ fontWeight: 600, fontSize: '1.25rem' }}
+              >
                 Four agents. One pipeline.
               </Typography>
-              <Typography variant="body1" sx={{ mb: 1.5 }}>
-                Our AI agents cover the full pre-trial workflow: patient identification across the EHR, voice-led pre-screening, 24/7 eligibility monitoring, and accurate export into EDC and eCOA—so trials launch faster and stay on track.
-              </Typography>
-              <Stack direction="row" flexWrap="wrap" gap={1} sx={{ mt: 1.5 }}>
-                {['Identification', 'Pre-screening', 'Monitoring', 'Data storage'].map((label) => (
-                  <Box
-                    key={label}
-                    component="span"
-                    sx={{
-                      px: 1.5,
-                      py: 0.5,
-                      borderRadius: 999,
-                      bgcolor: 'primary.main',
-                      color: 'white',
-                      fontSize: 12,
-                      fontWeight: 600,
-                    }}
-                  >
-                    {label}
-                  </Box>
-                ))}
-              </Stack>
+              <Box sx={{ position: 'relative', width: '100%' }}>
+                <Box
+                  sx={{
+                    position: 'relative',
+                    width: '100%',
+                    height: 132,
+                  }}
+                >
+                  <Fade in key={agentIndex} timeout={500}>
+                    <Box
+                      sx={{
+                        position: 'absolute',
+                        inset: 0,
+                        px: 2.5,
+                        py: 2,
+                        borderRadius: 2,
+                        bgcolor: '#eef2f7',
+                        color: 'primary.main',
+                        textAlign: 'center',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        justifyContent: 'center',
+                      }}
+                    >
+                      <Typography
+                        variant="subtitle1"
+                        sx={{ fontWeight: 700, display: 'block', fontSize: '1rem' }}
+                      >
+                        {AGENTS[agentIndex].name}
+                      </Typography>
+                      <Typography
+                        variant="body2"
+                        sx={{
+                          opacity: 0.95,
+                          mt: 0.5,
+                          lineHeight: 1.35,
+                          overflow: 'hidden',
+                          display: '-webkit-box',
+                          WebkitLineClamp: 2,
+                          WebkitBoxOrient: 'vertical',
+                          fontSize: '0.8125rem',
+                        }}
+                      >
+                        {AGENTS[agentIndex].description}
+                      </Typography>
+                    </Box>
+                  </Fade>
+                </Box>
+                <Stack
+                  direction="row"
+                  justifyContent="center"
+                  spacing={1}
+                  sx={{ mt: 1.5 }}
+                >
+                  {AGENTS.map((_, i) => (
+                    <Box
+                      key={i}
+                      sx={{
+                        width: 8,
+                        height: 8,
+                        borderRadius: '50%',
+                        bgcolor: agentIndex === i ? 'primary.main' : 'action.hover',
+                      }}
+                    />
+                  ))}
+                </Stack>
+              </Box>
             </Box>
           </Box>
           </Box>
         </Fade>
       </Container>
     </Box>
+
+    <FeaturesSection />
+    </>
   )
 }
 

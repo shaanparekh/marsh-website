@@ -1,13 +1,40 @@
 import { Box, Typography, TextField, Button, Paper, Fade, Container, Stack } from '@mui/material'
 import { useState } from 'react'
 
+const FORMSPREE_URL = import.meta.env.VITE_FORMSPREE_FORM_ID
+  ? `https://formspree.io/f/${import.meta.env.VITE_FORMSPREE_FORM_ID}`
+  : null
+
 function ContactPage() {
   const [email, setEmail] = useState('')
   const [submitted, setSubmitted] = useState(false)
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState(null)
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
-    setSubmitted(true)
+    setError(null)
+    if (!email.trim()) return
+
+    if (!FORMSPREE_URL) {
+      setError('Form is not configured. Set VITE_FORMSPREE_FORM_ID in your environment.')
+      return
+    }
+
+    setLoading(true)
+    try {
+      const res = await fetch(FORMSPREE_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: email.trim() }),
+      })
+      if (!res.ok) throw new Error('Submit failed')
+      setSubmitted(true)
+    } catch {
+      setError('Something went wrong. Please try again or email us directly.')
+    } finally {
+      setLoading(false)
+    }
   }
 
   const sectionGradient = 'linear-gradient(135deg, #f8fafc 0%, #eef2f7 100%)'
@@ -124,6 +151,9 @@ function ContactPage() {
                         variant="outlined"
                         autoComplete="email"
                         size="medium"
+                        disabled={loading}
+                        error={!!error}
+                        helperText={error}
                         sx={{
                           '& .MuiOutlinedInput-root': {
                             borderRadius: 2,
@@ -137,6 +167,7 @@ function ContactPage() {
                         variant="contained"
                         size="large"
                         fullWidth
+                        disabled={loading}
                         sx={{
                           mt: 2.5,
                           py: 1.5,
@@ -146,7 +177,7 @@ function ContactPage() {
                           letterSpacing: '-0.01em',
                         }}
                       >
-                        Submit
+                        {loading ? 'Submitting…' : 'Submit'}
                       </Button>
                     </form>
                     <Typography

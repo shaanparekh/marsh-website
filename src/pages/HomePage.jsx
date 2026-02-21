@@ -90,13 +90,10 @@ function HomePage() {
                 </Box>
               </Typography>
             <Typography
-              variant="body1"
+              variant="h6"
               color="text.secondary"
-              sx={{ maxWidth: 520, mb: 2 }}
+              sx={{ maxWidth: 520, mb: 4, fontWeight: 600, lineHeight: 1.4 }}
             >
-              Pre-trial operations take about 12 months and run manually in legacy systems—leading to billions in excess spend and delayed trials. We build AI agents that handle identification, pre-screening, monitoring, and data storage so coordinators and CROs can move at the speed of science.
-            </Typography>
-            <Typography variant="body2" color="text.secondary" sx={{ maxWidth: 520, mb: 4 }}>
               $65B+ in excess operational spend over the last 4 years. We’re built to change that.
             </Typography>
 
